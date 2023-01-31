@@ -2,15 +2,16 @@ const TelegramApi = require('node-telegram-bot-api')
 const {gameOptions, againOptions} = require('./options')
 const sequelize = require('./db')
 const UserModel = require('./models')
+require('dotenv').config()
 
-const token = '5693665980:AAHBxSm7oT3TDkoJQP2tal6rnLizFSF1GsY'
+const token = process.env.TOKEN
 
 const bot = new TelegramApi(token, {polling: true})
 
 const chats = {}
 
 const startGame = async (chatId) => {
-    await bot.sendMessage(chatId, 'Се3йчас я загадаю цифру от 0 до 9, а ты должен её угадать!')
+    await bot.sendMessage(chatId, 'Сейчас я загадаю цифру от 0 до 9, а ты должен её угадать!')
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber
     await bot.sendMessage(chatId, 'Отгадывай', gameOptions)
@@ -51,7 +52,6 @@ const start = async () => {
 
             return bot.sendMessage(chatId, 'Я тебя не понимаю, попробуй ещё раз!)')
         } catch (e) {
-            console.log(e)
             return bot.sendMessage(chatId, 'Произошла какая-то ошибка!');
         }
 
